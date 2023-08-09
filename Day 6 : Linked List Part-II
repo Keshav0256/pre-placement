@@ -1,0 +1,273 @@
+1.
+ int init = []
+{
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::ofstream out("user.out");
+    for(string s; getline(std::cin, s);)
+    {
+        if(s[0] != '0') out << "Intersected at '" << s << "'\n";
+        else out << "No intersection\n";
+        for(int i = 0; i < 4; ++i) getline(std::cin, s);
+    }
+    out.flush();
+    exit(0);
+    return 0;
+}();
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        unordered_map<ListNode*,int>mpp;
+    for (auto p = headA ; p!=NULL ; p = p->next){
+        mpp[p]=p->val;
+    }
+    for (auto p = headB ; p!=NULL ; p = p->next){
+        if (mpp.find(p)!=mpp.end()) return p;
+    }
+    return NULL;
+    }
+};
+2.
+class Solution {
+public:
+    bool hasCycle(ListNode *head) {
+	
+		// if head is NULL then return false;
+        if(head == NULL)
+            return false;
+        
+		// making two pointers fast and slow and assignning them to head
+        ListNode *fast = head;
+        ListNode *slow = head;
+        
+		// till fast and fast-> next not reaches NULL
+		// we will increment fast by 2 step and slow by 1 step
+        while(fast != NULL && fast ->next != NULL)
+        {
+            fast = fast->next->next;
+            slow = slow->next;
+            
+			
+			// At the point if fast and slow are at same address
+			// this means linked list has a cycle in it.
+            if(fast == slow)
+                return true;
+        }
+        
+		// if traversal reaches to NULL this means no cycle.
+        return false;
+    }
+};
+3.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* Kreverse(ListNode* head,int k,int n){
+
+        if(n<k)return head;
+        ListNode* next=NULL;
+        ListNode* curr=head;
+        ListNode* prev=NULL;
+        int cnt=0;
+        while(cnt<k and curr!=NULL){
+            next=curr->next;
+            curr->next=prev;
+            prev=curr;
+            curr=next;
+            cnt++;
+        }
+        if(next!=NULL)head->next=Kreverse(next,k,n-k);
+
+        return prev;
+    }
+    ListNode* reverseKGroup(ListNode* head, int k) {
+        
+        if(head==NULL)return NULL;
+        ListNode* temp=head;
+        int n=0;
+        while(temp){
+            temp=temp->next;
+            n++;
+        }
+        return Kreverse(head,k,n);
+    }
+};
+4./**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    bool pali(ListNode * &head, ListNode * head1){
+        if(head1==NULL){
+            return true;
+        }
+        bool x=pali(head,head1->next);
+        if(head==NULL){return false;}
+        if (head->val!=head1->val){
+            head->next=NULL;
+            return false;
+        }
+        head=head->next;
+        return x;
+    }
+
+
+    bool isPalindrome(ListNode* head) {
+        return pali(head,head);    
+    }
+};
+5.
+// C++ program for flattening a Linked List
+#include <bits/stdc++.h>
+using namespace std;
+
+// Linked list node
+class Node {
+public:
+	int data;
+	Node *right, *down;
+};
+
+Node* head = NULL;
+
+// An utility function to merge two sorted
+// linked lists
+Node* merge(Node* a, Node* b)
+{
+
+	// If first linked list is empty then second
+	// is the answer
+	if (a == NULL)
+		return b;
+
+	// If second linked list is empty then first
+	// is the result
+	if (b == NULL)
+		return a;
+
+	// Compare the data members of the two linked
+	// lists and put the larger one in the result
+	Node* result;
+
+	if (a->data < b->data) {
+		result = a;
+		result->down = merge(a->down, b);
+	}
+
+	else {
+		result = b;
+		result->down = merge(a, b->down);
+	}
+	result->right = NULL;
+	return result;
+}
+
+Node* flatten(Node* root)
+{
+
+	// Base Cases
+	if (root == NULL || root->right == NULL)
+		return root;
+
+	// Recur for list on right
+	root->right = flatten(root->right);
+
+	// Now merge
+	root = merge(root, root->right);
+
+	// Return the root
+	// it will be in turn merged with its left
+	return root;
+}
+
+// Utility function to insert a node at
+// beginning of the linked list
+Node* push(Node* head_ref, int data)
+{
+
+	// Allocate the Node & Put in the data
+	Node* new_node = new Node();
+
+	new_node->data = data;
+	new_node->right = NULL;
+
+	// Make next of new Node as head
+	new_node->down = head_ref;
+
+	// Move the head to point to new Node
+	head_ref = new_node;
+
+	return head_ref;
+}
+
+void printList()
+{
+	Node* temp = head;
+	while (temp != NULL) {
+		cout << temp->data << " ";
+		temp = temp->down;
+	}
+	cout << endl;
+}
+
+// Driver's code
+int main()
+{
+
+	/* Let us create the following linked list
+		5 -> 10 -> 19 -> 28
+		| |	 |	 |
+		V V	 V	 V
+		7 20 22 35
+		|		 |	 |
+		V		 V	 V
+		8		 50 40
+		|			 |
+		V			 V
+		30			 45
+	*/
+	head = push(head, 30);
+	head = push(head, 8);
+	head = push(head, 7);
+	head = push(head, 5);
+
+	head->right = push(head->right, 20);
+	head->right = push(head->right, 10);
+
+	head->right->right = push(head->right->right, 50);
+	head->right->right = push(head->right->right, 22);
+	head->right->right = push(head->right->right, 19);
+
+	head->right->right->right
+		= push(head->right->right->right, 45);
+	head->right->right->right
+		= push(head->right->right->right, 40);
+	head->right->right->right
+		= push(head->right->right->right, 35);
+	head->right->right->right
+		= push(head->right->right->right, 20);
+
+	// Function call
+	head = flatten(head);
+
+	printList();
+	return 0;
+}
+
+

@@ -1,0 +1,109 @@
+Rotate Image by 90 degree
+def rotate(self, matrix: List[List[int]]) -> None:
+	n = len(matrix)
+	for row in range(math.ceil(n / 2)):
+		for col in range(int(n - n / 2)):
+			(
+				matrix[row][col],
+				matrix[~col][row],
+				matrix[~row][~col],
+				matrix[col][~row],
+			) = (
+				matrix[~col][row],
+				matrix[~row][~col],
+				matrix[col][~row],
+				matrix[row][col],
+			)
+	return matrix
+2.Merge Overlapping Sub-intervals:
+class Solution {
+public:
+    vector<vector<int>> merge(vector<vector<int>>& intervals) {
+        vector<vector<int>> res;
+        sort(intervals.begin(),intervals.end());
+        int x1=intervals[0][0],x2=intervals[0][1];
+        for(int i=1;i<intervals.size();i++){
+            int y1=intervals[i][0],y2=intervals[i][1];
+            if(x2<y1){
+                res.push_back({x1,x2});
+                x1=y1;
+                x2=y2;
+            }
+            else if(x2==y1)
+                x2=y2;
+            else if(x1<=y1 && y1<x2)
+                x2=max(x2,y2);
+        }
+        res.push_back({x1,x2});
+        return res;
+    }
+};
+3.Merge two Sorted Arrays Without Extra Space:
+void merge(int arr1[], int arr2[], int n, int m) {
+    // code here
+    int i=n-1;
+    int j=0;
+    while(i>=0 and j<m)
+    {
+        if(arr1[i]>=arr2[j])
+        {
+            swap(arr1[i],arr2[j]);
+            i--;
+            j++;
+        }
+        else
+        {
+            break;
+        }
+    }
+    sort(arr1,arr1+n);
+    sort(arr2,arr2+m);
+}
+4.Find the duplicate in an array of N+1 integers:
+class Solution {
+public:
+    int findDuplicate(vector<int>& nums) {
+        vector<bool>hash(nums.size(),false);
+    for(int i=0;i<nums.size();i++)
+        {
+        if(hash[nums[i]]){return nums[i];}
+        hash[nums[i]]=true;
+        
+        }
+        
+        return 1;
+    }
+};
+5.Find the repeating and missing numbers:
+class Solution {
+public:
+    int missingNumber(vector<int>& nums) {
+        int num = 0, n=nums.size(), x=nums[0];
+        for(int i=1; i<=n;i++)num^=i;
+        for(int i=1; i<n; i++)x^=nums[i];
+        return num^x;
+    }
+};
+6.Count inversions in an array:
+# Python3 program to count
+# inversions in an array
+
+
+def getInvCount(arr, n):
+
+	inv_count = 0
+	for i in range(n):
+		for j in range(i + 1, n):
+			if (arr[i] > arr[j]):
+				inv_count += 1
+
+	return inv_count
+
+
+# Driver Code
+arr = [1, 20, 6, 4, 5]
+n = len(arr)
+print("Number of inversions are",
+	getInvCount(arr, n))
+
+

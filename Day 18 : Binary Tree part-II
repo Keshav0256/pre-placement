@@ -1,0 +1,134 @@
+1.
+class Solution {
+public:
+    vector<int> levelOrder(TreeNode* root) {
+        vector<int> ans; 
+        
+        if(root == NULL) 
+            return ans; 
+            
+        queue<TreeNode*> q; 
+        q.push(root); 
+        
+        while(!q.empty()) {
+           
+            TreeNode *temp = q.front(); 
+            q.pop(); 
+            
+            if(temp->left != NULL) 
+                q.push(temp->left); 
+            if(temp->right != NULL) 
+                q.push(temp->right); 
+                
+            ans.push_back(temp->val); 
+        }
+        return ans; 
+    }
+};
+2.
+public class tUf {
+    private static int levelOrder( TreeNode root ){
+        if( root == null ){
+            return 0;
+        }
+
+        LinkedList<TreeNode> queue = new LinkedList<>();
+        queue.addLast(root);
+
+        int level = 0;
+
+        while( queue.size() > 0 ){
+            int size = queue.size();
+
+            while( size-- > 0 ){
+                TreeNode remNode = queue.removeFirst();
+                if( remNode.left != null ){
+                    queue.addLast( remNode.left );
+                }
+                if( remNode.right != null ){
+                        queue.addLast( remNode.right );
+                }
+            }
+
+            level++;
+        }
+
+        return level;
+    }  
+}
+3.
+class Solution {
+public:
+    int diameterOfBinaryTree(TreeNode* root) {
+        int diameter = 0;
+        height(root, diameter);
+        return diameter;
+    }
+
+private:
+    int height(TreeNode* node, int& diameter) {
+
+        if (!node) {
+            return 0;
+        }
+
+        int lh = height(node->left, diameter);
+        int rh = height(node->right, diameter);
+
+        diameter = max(diameter, lh + rh);
+
+        return 1 + max(lh, rh);
+    }
+};
+4.
+class Solution {
+
+public:
+    bool isBalanced(TreeNode* root) {
+        return dfsHeight (root) != -1;
+    }
+
+    int dfsHeight (TreeNode *root) {
+
+        if (root == NULL) return 0;
+        
+        int leftHeight = dfsHeight (root -> left);
+
+        if (leftHeight == -1) 
+            return -1;
+        
+        int rightHeight = dfsHeight (root -> right);
+
+        if (rightHeight == -1) 
+            return -1;
+        
+        if (abs(leftHeight - rightHeight) > 1)  
+            return -1;
+
+        return max (leftHeight, rightHeight) + 1;
+    }
+};
+5.
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        //base case
+        if (root == NULL || root == p || root == q) {
+            return root;
+        }
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+
+        //result
+        if(left == NULL) {
+            return right;
+        }
+        else if(right == NULL) {
+            return left;
+        }
+        else { //both left and right are not null, we found our result
+            return root;
+        }
+    }
+};
+

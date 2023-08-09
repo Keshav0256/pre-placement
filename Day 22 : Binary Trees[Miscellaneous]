@@ -1,0 +1,176 @@
+1.
+class Solution {
+public:
+    
+    TreeNode* rightmost(TreeNode* root){
+        if (root->right==NULL) return root;
+        return rightmost(root->right);
+    }
+    
+    void flatten(TreeNode* root) {
+        if (root==NULL) return;
+        TreeNode* nextright;
+        TreeNode* rightMOST;
+        
+        while (root){
+            
+            if (root->left){
+                rightMOST = rightmost(root->left);
+                nextright = root->right;
+                root->right = root->left;
+                root->left=NULL;
+                rightMOST->right=nextright;
+            }
+            root=root->right;
+        }
+    }
+};
+2.
+class MedianFinder {
+    priority_queue<int> part1;
+    priority_queue<int,vector<int>,greater<int>> part2;
+public:
+    
+    MedianFinder() {
+        // part1 will be max-heap
+        part1 = priority_queue<int>{};
+        // part2 will be min-heap
+        part2 = priority_queue<int,vector<int>,greater<int>>{};
+    }
+    
+    void addNum(int num) {
+        // if part1 is empty we push in part1
+        if(part1.size()==0){
+            part1.push(num);
+            return;
+        }
+        // if part1 size is greater than part2.size()
+        if(part1.size() > part2.size()){
+            // data to be pushed is greater then top element of part1
+            // we are pushing the top element of part1 in part2 then
+            // pushing it in part1 to maintain
+            // (part1.size() >= part2.size() the size of both
+
+            if(num < part1.top()){
+                part2.push(part1.top());
+                part1.pop();
+                part1.push(num);
+            }
+            // num > part1.top() so we push in part2
+            else{
+                part2.push(num);
+            }
+        }
+        else{
+            // same logic as above
+            if(num < part1.top()){
+                part1.push(num);
+            }
+            else{
+                part2.push(num);
+                part1.push(part2.top());
+                part2.pop();
+            }
+        }
+    }
+    
+    double findMedian() {
+        if(part1.size() == part2.size()){
+            return (double)(part1.top() + part2.top())/2.0;
+        }
+        else{
+            return (double)part1.top();
+        }
+    }
+};
+
+
+3.
+class KthLargest {
+private:
+    int k;
+    priority_queue<int, vector<int>, greater<int>> pq;
+public:
+    KthLargest(int k, vector<int>& nums) {
+        this->k = k;
+        auto endPointer = nums.begin() + min(k, (int)nums.size());
+        pq = priority_queue<int, vector<int>, greater<int>> (nums.begin(), endPointer);
+        for (int i = k; i < nums.size(); ++i) {
+            pq.push(nums[i]);
+            pq.pop();
+        }
+    }
+    
+    int add(int val) {
+        pq.push(val);
+        if (pq.size() > k) {
+            pq.pop();
+        }
+        return pq.top();
+    }
+};
+
+
+/**
+ * Your KthLargest object will be instantiated and called as such:
+ * KthLargest* obj = new KthLargest(k, nums);
+ * int param_1 = obj->add(val);
+ */
+4.
+vector<int> Solution::dNums(vector<int> &A, int B) {
+
+    unordered_map<int,int>mp;
+
+    vector<int>ans;
+
+    int j=0;
+
+    int i=0;
+
+    while(i!=B){
+
+        mp[A[i]]++;
+
+        i++;
+
+    }
+
+    ans.push_back(mp.size());
+
+    for(int i=B;i<A.size();i++){
+
+        mp[A[i]]++;
+
+        mp[A[j]]--;
+
+        if(mp[A[j]]==0) mp.erase(A[j]);
+
+        j++;
+
+        ans.push_back(mp.size());
+
+    }
+
+    return ans;
+
+}
+
+5.
+class Solution {
+public:
+    int findKthLargest(vector<int>& nums, int k) 
+    {
+        priority_queue<int>pq;
+        for(auto i : nums)
+        {
+            pq.push(i);
+        }
+        k--;
+        while(k--)
+        {
+            pq.pop();
+        }
+        return pq.top();
+        
+    }
+};

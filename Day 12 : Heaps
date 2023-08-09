@@ -1,0 +1,173 @@
+1.
+#include <bits/stdc++.h>
+using namespace std ;
+
+class Solution {
+
+public:
+
+void kth_Largest_And_Smallest_By_AscendingOrder(vector<int>&arr, int k) {
+
+        sort(arr.begin(), arr.end())  ;
+        int n = arr.size()  ;
+
+        cout << "kth Largest element " << arr[n - k] << ", " << 
+        "kth Smallest element " << arr[k - 1];
+    }
+} ;
+int main() {
+
+    vector<int>arr = {1, 2, 6, 4, 5, 3}  ;
+
+    Solution obj ;
+    
+    obj.kth_Largest_And_Smallest_By_AscendingOrder(arr, 3) ;
+
+    return 0 ;
+}
+3.
+  bool rev(int a, int b)
+{
+    return b<a;
+}
+
+vector<int> Solution::solve(vector<int> &A, vector<int> &B, int C) {
+   
+   sort(A.begin(),A.end(),rev);
+    sort(B.begin(),B.end(),rev);
+    priority_queue<int,vector<int>,greater<int>> pq;
+    int n = A.size();
+    int k = 0;
+    while(k<n)
+    {
+        pq.push(A[k]+B[k]);
+        if(pq.size()>C){
+            pq.pop();
+            break;
+        }
+        k++;
+    }
+    for(int i = 0; i<n ;++i)
+    {
+        for(int j = 0; j<n;++j)
+        {
+            if(i!=j)
+            {
+                if((A[i]+B[j]) > pq.top())
+                {
+                    pq.pop();
+                    pq.push(A[i]+B[j]);
+                }
+                else
+                {
+                    break;
+                }
+            }
+        }
+    }
+    vector<int> ans;
+  while(pq.size()>0){
+      ans.push_back(pq.top());
+      pq.pop();
+  }
+    sort(ans.begin(), ans.end(),rev);
+    return ans;
+
+}
+
+4.
+class MedianFinder
+{
+public:
+    priority_queue<int> maxheap;
+    priority_queue<int, vector<int>, greater<int>> minheap;
+    MedianFinder()
+    {
+    }
+
+    void addNum(int num)
+    {
+        if (maxheap.empty() and minheap.empty())
+        {
+            maxheap.push(num);
+        }
+        else
+        {
+            if (maxheap.top() < num)
+            {
+                minheap.push(num);
+            }
+            else
+            {
+                maxheap.push(num);
+            }
+        }
+
+        // balancing
+        int n = maxheap.size();
+        int m = minheap.size();
+
+        if (abs(n - m) == 2)
+        {
+            if (n > m)
+            {
+                int x = maxheap.top();
+                maxheap.pop();
+                minheap.push(x);
+            }
+            else
+            {
+                int x = minheap.top();
+                minheap.pop();
+                maxheap.push(x);
+            }
+        }
+    }
+
+    double findMedian()
+    {
+        int n = maxheap.size();
+        int m = minheap.size();
+
+        if ((n + m) % 2)
+        {
+            if (n > m)
+            {
+                return 1.0 * maxheap.top();
+            }
+            else
+            {
+                return 1.0 * minheap.top();
+            }
+        }
+        else
+        {
+            return (double)(maxheap.top() + minheap.top()) / 2.0;
+        }
+    }
+};
+
+6.
+class Solution:
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
+        dic=dict()
+        res=[]
+        lis=[]
+        for i in nums:
+            if i in dic:
+                dic[i]+=1
+            else:
+                dic[i]=1
+        for i in dic.values():
+            lis.append(i)
+        lis.sort()
+        lis=lis[-k:]
+        for i in lis[:k]:
+            for j in dic:
+                if dic[j]==i and j not in res:
+                    res.append(j)
+        return res
+        
+
+
+        

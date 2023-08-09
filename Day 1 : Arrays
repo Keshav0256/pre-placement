@@ -1,0 +1,151 @@
+Set Matrix Zero:
+public class Solution {
+public void setZeroes(int[][] matrix) {
+    boolean fr = false,fc = false;
+    for(int i = 0; i < matrix.length; i++) {
+        for(int j = 0; j < matrix[0].length; j++) {
+            if(matrix[i][j] == 0) {
+                if(i == 0) fr = true;
+                if(j == 0) fc = true;
+                matrix[0][j] = 0;
+                matrix[i][0] = 0;
+            }
+        }
+    }
+    for(int i = 1; i < matrix.length; i++) {
+        for(int j = 1; j < matrix[0].length; j++) {
+            if(matrix[i][0] == 0 || matrix[0][j] == 0) {
+                matrix[i][j] = 0;
+        }}
+    }
+    if(fr) {
+        for(int j = 0; j < matrix[0].length; j++) {
+            matrix[0][j] = 0;
+        }
+    }
+    if(fc) {
+        for(int i = 0; i < matrix.length; i++) {
+            matrix[i][0] = 0;
+        }
+    }
+}}
+2.Program to generate Pascal’s Triangle:
+class Solution:
+    def generate(self, numRows: int) -> List[List[int]]:
+        ans = [[1]] if numRows == 1 else [[1],[1,1]]
+        for i in range(1, numRows-1):
+            row_midList = []
+            for lastRowList_index in range(0, len(ans[-1])-1):
+                row_midList.append(ans[-1][lastRowList_index] + ans[-1][lastRowList_index+1])
+            ans.append([1]+row_midList+[1])
+        return ans
+3.next_permutation : find next lexicographically greater permutation
+class Solution:
+	def nextPermutation(self, nums: List[int]) -> None:
+		n = len(nums)
+		if n <= 1:
+			return
+
+		# 1st Step...
+		i = n-2
+		while i >= 0 and nums[i] >= nums[i+1]:
+			i -= 1
+		# ...
+
+		if i < 0:
+			# It shows that all the elements are in descending order.
+			nums[:] = nums[::-1]
+		else:
+			# 2nd Step...
+			j = n-1
+			while nums[j] <= nums[i]:
+				j -= 1
+			# ...
+
+			# 3rd Step...
+			nums[i], nums[j] = nums[j], nums[i]
+			# ...
+
+			# 4th Step...
+			nums[i+1:] = sorted(nums[i+1:])
+			# ...
+4.Kadane’s Algorithm : Maximum Subarray Sum in an Array:
+# Python program to find maximum contiguous subarray
+
+# Function to find the maximum contiguous subarray
+from sys import maxint
+
+
+def maxSubArraySum(a, size):
+
+	max_so_far = -maxint - 1
+	max_ending_here = 0
+
+	for i in range(0, size):
+		max_ending_here = max_ending_here + a[i]
+		if (max_so_far < max_ending_here):
+			max_so_far = max_ending_here
+
+		if max_ending_here < 0:
+			max_ending_here = 0
+	return max_so_far
+
+# Driver function to check the above function
+
+
+a = [-2, -3, 4, -1, -2, 1, 5, -3]
+
+print "Maximum contiguous sum is", maxSubArraySum(a, len(a))
+
+# This code is contributed by _Devesh Agrawal_
+5.Sort an array of 0s, 1s and 2s:
+# Python program to sort an array with
+# 0, 1 and 2 in a single pass
+
+# Function to sort array
+
+
+def sort012(a, arr_size):
+	lo = 0
+	hi = arr_size - 1
+	mid = 0
+	# Iterate till all the elements
+	# are sorted
+	while mid <= hi:
+		# If the element is 0
+		if a[mid] == 0:
+			a[lo], a[mid] = a[mid], a[lo]
+			lo = lo + 1
+			mid = mid + 1
+		# If the element is 1
+		elif a[mid] == 1:
+			mid = mid + 1
+		# If the element is 2
+		else:
+			a[mid], a[hi] = a[hi], a[mid]
+			hi = hi - 1
+	return a
+
+# Function to print array
+
+
+def printArray(a):
+	for k in a:
+		print(k, end=' ')
+
+
+# Driver Program
+arr = [0, 1, 1, 0, 1, 2, 1, 2, 0, 0, 0, 1]
+arr_size = len(arr)
+arr = sort012(arr, arr_size)
+printArray(arr)
+
+6.Stock Buy And Sell:
+class Solution(object):
+    def maxProfit(self, prices):
+        l,r=0,1;maxP=0 
+        while r<len(prices):
+            if prices[l]<prices[r]:profit=prices[r]-prices[l];maxP=max(maxP, profit)                
+            else:l=r 
+            r+=1
+        return maxP

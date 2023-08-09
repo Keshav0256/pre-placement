@@ -1,0 +1,205 @@
+1.
+#include<bits/stdc++.h>
+
+using namespace std;
+class Solution {
+  public:
+    void subsetSumsHelper(int ind, vector < int > & arr, int n, vector < int > & ans, int sum) {
+      if (ind == n) {
+        ans.push_back(sum);
+        return;
+      }
+      //element is picked
+      subsetSumsHelper(ind + 1, arr, n, ans, sum + arr[ind]);
+      //element is not picked
+      subsetSumsHelper(ind + 1, arr, n, ans, sum);
+    }
+  vector < int > subsetSums(vector < int > arr, int n) {
+    vector < int > ans;
+    subsetSumsHelper(0, arr, n, ans, 0);
+    sort(ans.begin(), ans.end());
+    return ans;
+  }
+};
+2.
+#include <bits/stdc++.h>
+
+using namespace std;
+void printAns(vector < vector < int >> & ans) {
+  cout << "The unique subsets are " << endl;
+  cout << "[ ";
+  for (int i = 0; i < ans.size(); i++) {
+    cout << "[ ";
+    for (int j = 0; j < ans[i].size(); j++)
+      cout << ans[i][j] << " ";
+    cout << "]";
+  }
+  cout << " ]";
+}
+class Solution {
+  public:
+    void fun(vector < int > & nums, int index, vector < int > ds, set < vector < int >> & res) {
+      if (index == nums.size()) {
+        sort(ds.begin(), ds.end());
+        res.insert(ds);
+        return;
+      }
+      ds.push_back(nums[index]);
+      fun(nums, index + 1, ds, res);
+      ds.pop_back();
+      fun(nums, index + 1, ds, res);
+    }
+  vector < vector < int >> subsetsWithDup(vector < int > & nums) {
+    vector < vector < int >> ans;
+    set < vector < int >> res;
+    vector < int > ds;
+    fun(nums, 0, ds, res);
+    for (auto it = res.begin(); it != res.end(); it++) {
+      ans.push_back( * it);
+    }
+    return ans;
+  }
+};
+int main() {
+  Solution obj;
+  vector < int > nums = {1, 2, 2};
+  vector < vector < int >> ans = obj.subsetsWithDup(nums);
+  printAns(ans);
+  return 0;
+}
+3.
+#include<bits/stdc++.h>
+
+using namespace std;
+class Solution {
+  public:
+    void findCombination(int ind, int target, vector < int > & arr, vector < vector < int >> & ans, vector < int > & ds) {
+      if (ind == arr.size()) {
+        if (target == 0) {
+          ans.push_back(ds);
+        }
+        return;
+      }
+      // pick up the element 
+      if (arr[ind] <= target) {
+        ds.push_back(arr[ind]);
+        findCombination(ind, target - arr[ind], arr, ans, ds);
+        ds.pop_back();
+      }
+
+      findCombination(ind + 1, target, arr, ans, ds);
+
+    }
+  public:
+    vector < vector < int >> combinationSum(vector < int > & candidates, int target) {
+      vector < vector < int >> ans;
+      vector < int > ds;
+      findCombination(0, target, candidates, ans, ds);
+      return ans;
+    }
+};
+int main() {
+  Solution obj;
+  vector < int > v {2,3,6,7};
+  int target = 7;
+
+  vector < vector < int >> ans = obj.combinationSum(v, target);
+  cout << "Combinations are: " << endl;
+  for (int i = 0; i < ans.size(); i++) {
+    for (int j = 0; j < ans[i].size(); j++)
+      cout << ans[i][j] << " ";
+    cout << endl;
+  }
+}
+4.
+#include<bits/stdc++.h>
+
+using namespace std;
+void findCombination(int ind, int target, vector < int > & arr, vector < vector < int >> & ans, vector < int > & ds) {
+  if (target == 0) {
+    ans.push_back(ds);
+    return;
+  }
+  for (int i = ind; i < arr.size(); i++) {
+    if (i > ind && arr[i] == arr[i - 1]) continue;
+    if (arr[i] > target) break;
+    ds.push_back(arr[i]);
+    findCombination(i + 1, target - arr[i], arr, ans, ds);
+    ds.pop_back();
+  }
+}
+vector < vector < int >> combinationSum2(vector < int > & candidates, int target) {
+  sort(candidates.begin(), candidates.end());
+  vector < vector < int >> ans;
+  vector < int > ds;
+  findCombination(0, target, candidates, ans, ds);
+  return ans;
+}
+int main() {
+  vector<int> v{10,1,2,7,6,1,5};
+  vector < vector < int >> comb = combinationSum2(v, 8);
+  cout << "[ ";
+  for (int i = 0; i < comb.size(); i++) {
+    cout << "[ ";
+    for (int j = 0; j < comb[i].size(); j++) {
+      cout << comb[i][j] << " ";
+    }
+    cout << "]";
+  }
+  cout << " ]";
+}
+5.
+#include <bits/stdc++.h>
+
+using namespace std;
+
+class Solution {
+  public:
+    vector < vector < string >> partition(string s) {
+      vector < vector < string > > res;
+      vector < string > path;
+      partitionHelper(0, s, path, res);
+      return res;
+    }
+
+  void partitionHelper(int index, string s, vector < string > & path,
+    vector < vector < string > > & res) {
+    if (index == s.size()) {
+      res.push_back(path);
+      return;
+    }
+    for (int i = index; i < s.size(); ++i) {
+      if (isPalindrome(s, index, i)) {
+        path.push_back(s.substr(index, i - index + 1));
+        partitionHelper(i + 1, s, path, res);
+        path.pop_back();
+      }
+    }
+  }
+
+  bool isPalindrome(string s, int start, int end) {
+    while (start <= end) {
+      if (s[start++] != s[end--])
+        return false;
+    }
+    return true;
+  }
+};
+int main() {
+  string s = "aabb";
+  Solution obj;
+  vector < vector < string >> ans = obj.partition(s);
+  int n = ans.size();
+  cout << "The Palindromic partitions are :-" << endl;
+  cout << " [ ";
+  for (auto i: ans) {
+    cout << "[ ";
+    for (auto j: i) {
+      cout << j << " ";
+    }
+    cout << "] ";
+  }
+  cout << "]";
+
+  return 0;
+}

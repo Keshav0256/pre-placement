@@ -1,0 +1,190 @@
+1.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* reverseList(ListNode* head) {
+     if(head==nullptr || head->next==nullptr)
+     {
+         return head;
+     }
+     ListNode *curr, *prev, *next;
+     curr=head;
+     prev=nullptr;
+     while(curr!=nullptr)
+     {
+         next=curr->next;
+         curr->next=prev;
+         prev=curr;
+         curr=next;
+     }
+     return prev;
+    }
+};
+2.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode* slow=head;
+        while(head!=NULL && head->next!=NULL)
+        {
+            slow=slow->next;
+            head=head->next->next;
+        }
+        return slow;
+    }
+};
+3.
+# Python program for the above approach
+# link list node
+class Node:
+	def __init__(self, key):
+		self.key = key
+		self.next = None
+		
+
+# return a newnode
+def newNode(key):
+	return Node(key)
+
+
+# driver code
+#let us create two sorted linked lists to test the above
+#function. Created lists shall be
+#a: 5->10->15->40
+#b: 2->3->20
+a = Node(5)
+a.next = Node(10)
+a.next.next = Node(15)
+a.next.next.next = Node(40)
+
+b = Node(2)
+b.next = Node(3)
+b.next.next = Node(20)
+
+v = []
+while(a is not None):
+	v.append(a.key)
+	a = a.next
+
+while(b is not None):
+	v.append(b.key)
+	b = b.next
+
+v.sort()
+result = Node(-1)
+temp = result
+for i in range(len(v)):
+	result.next = Node(v[i])
+	result = result.next
+
+temp = temp.next
+print("Resultant Merge Linked List is : ")
+while(temp is not None):
+	print(temp.key, end=" ")
+	temp = temp.next
+
+4.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    int cnt=0;//total no of nodes
+    void f(ListNode* head)
+    {
+       while(head!=NULL)
+       {
+           cnt++;
+           head=head->next;
+       }
+    }
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* temp=head;
+        ListNode* temp1=head;
+        f(temp1);
+        int z=cnt-n+1;//count from starting position
+        ListNode* prev;
+        ListNode* next1;
+        int c=0;
+        if(z==1)
+        {
+           return head->next; 
+        }
+        while(temp!=NULL and temp->next!=NULL)
+        {
+            next1=temp->next;
+            prev=temp;
+            temp=temp->next;
+            c++;
+            if(c+1==z)
+            {
+                prev->next=next1->next;
+            }  
+        }
+        return head;
+    }
+};
+5.
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        ListNode* dummy=new ListNode();
+        ListNode* temp=dummy;
+        int carry=0;
+        while(l1!=NULL || l2!=NULL || carry){
+            int sum=0;
+            if(l1!=NULL){
+                sum+=l1->val;
+                l1=l1->next;
+            }
+            if(l2!=NULL){
+                sum+=l2->val;
+                l2=l2->next;
+            }
+            sum+=carry;
+            carry=sum/10;
+            ListNode* newnode=new ListNode(sum%10);
+            temp->next=newnode;
+            temp=temp->next;
+        }
+        return dummy->next;
+    }
+};
+
+
